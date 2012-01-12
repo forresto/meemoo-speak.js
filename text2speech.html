@@ -31,6 +31,8 @@
     options.pitch = 50;
     options.speed = 175;
     options.wordgap = 0;
+    
+    var rendered = false;
   
     Meemoo.setInfo({
       title: "text2speech",
@@ -41,6 +43,9 @@
         action: function (_text) {
           if (text != _text) {
             text = _text;
+            rendered = false;
+          }
+          if (!rendered) {
             document.getElementById('status').innerHTML = text + " [processing...]";
             window.setTimeout(function(){
               speak(text, options);
@@ -49,8 +54,9 @@
                 Meemoo.send("audio", document.getElementById("player").src);
               },100);
             },100);
+            rendered = true;
           } else {
-              document.getElementById("player").play();
+            document.getElementById("player").play();
           }
         },
         type: "data:image"
@@ -58,6 +64,7 @@
       amplitude: {
         action: function (val) {
           options.amplitude = val;
+          rendered = false;
         },
         type: "int",
         min: 0,
@@ -66,6 +73,7 @@
       pitch: {
         action: function (val) {
           options.pitch = val;
+          rendered = false;
         },
         type: "int",
         min: 0,
@@ -74,6 +82,7 @@
       speed: {
         action: function (val) {
           options.speed = val;
+          rendered = false;
         },
         min: 0,
         type: "int",
@@ -83,6 +92,7 @@
         action: function (val) {
           // Speak.js wants 10ms units
           options.wordgap = Math.round(val/10);
+          rendered = false;
         },
         type: "int",
         min: 0,
