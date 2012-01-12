@@ -41,10 +41,14 @@
         action: function (_text) {
           if (text != _text) {
             text = _text;
-            document.getElementById('status').innerHTML = text + "...";
-            speak(text, options);
-            document.getElementById('status').innerHTML = text;
-            Meemoo.send("audio", document.getElementById("player").src);
+            document.getElementById('status').innerHTML = text + " [processing...]";
+            window.setTimeout(function(){
+              speak(text, options);
+              document.getElementById('status').innerHTML = text;
+              window.setTimeout(function(){
+                Meemoo.send("audio", document.getElementById("player").src);
+              },100);
+            },100);
           } else {
               document.getElementById("player").play();
           }
