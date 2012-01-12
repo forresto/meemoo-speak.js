@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>text2speech</title>
+  <meta name="author" content="forresto" />
+  <meta name="description" content="speech to text with x-webkit-speech" />
+  
+  <script src="http://meemoo.org/meemoo/meemoo.js"></script>
+  <script src="speak.js"></script>
+  
+  <style type="text/css">
+    html, body {
+      margin:0;
+      padding:0;
+      font-family: Verdana;
+      font-size: 10px;
+    }
+  </style>
+</head>
+<body>
+  
+  <div id="status"></div>
+  <div id="audio"></div>
+    
+  <script type="text/javascript">
+  
+    var text = "";
+    var options = {};
+    options.amplitude = 100;
+    options.pitch = 50;
+    options.speed = 175;
+    options.wordgap = 0;
+  
+    Meemoo.setInfo({
+      title: "text2speech",
+      author: "forresto",
+      description: "text to speech with speak.js"
+    }).addInputs({
+      text: {
+        action: function (_text) {
+          if (text != _text) {
+            text = _text;
+            document.getElementById('status').innerHTML = text + "...";
+            speak(text, options);
+            document.getElementById('status').innerHTML = text;
+            Meemoo.send("audio", document.getElementById("player").src);
+          } else {
+              document.getElementById("player").play();
+          }
+        },
+        type: "data:image"
+      },
+      amplitude: {
+        action: function (val) {
+          options.amplitude = val;
+        },
+        type: "int",
+        min: 0,
+        max: 100
+      },
+      pitch: {
+        action: function (val) {
+          options.pitch = val;
+        },
+        type: "int",
+        min: 0,
+        max: 100
+      },
+      speed: {
+        action: function (val) {
+          options.speed = val;
+        },
+        min: 0,
+        type: "int",
+        description: "speed in words-per-minute"
+      },
+      wordgap: {
+        action: function (val) {
+          // Speak.js wants 10ms units
+          options.wordgap = Math.round(val/10);
+        },
+        type: "int",
+        min: 0,
+        max: 100,
+        description: "gap between words in ms"
+      }
+
+    }).addOutputs({
+      audio: {
+        type: "data:audio/x-wav"
+      }
+    });
+    
+  </script>
+  
+</body>
+</html>
