@@ -52,9 +52,16 @@ function speak(text, args) {
       }
       return ret;
     }
+    
+    var audioSource = "data:audio/x-wav;base64,"+encode64(wav);
 
-    document.getElementById("audio").innerHTML=("<audio id=\"player\" src=\"data:audio/x-wav;base64,"+encode64(wav)+"\">");
+    document.getElementById("audio").innerHTML=("<audio id=\"player\" src=\""+audioSource+"\">");
     document.getElementById("player").play();
+    
+    // Meemoo module specific, send when worker is done
+    Meemoo.send("audio", audioSource);
+    document.getElementById('status').innerHTML = text;
+
   }
 
   function playAudioDataAPI(data) {
