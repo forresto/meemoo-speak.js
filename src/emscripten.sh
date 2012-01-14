@@ -10,20 +10,19 @@ make clean
 rm libespeak.*
 rm speak speak.bc speak.o
 CXXFLAGS="-DNEED_WCHAR_FUNCTIONS" $EMSCRIPTEN/emmake make -j 4
+mv speak speak.bc
 
-echo "dis"
-~/Dev/llvm/cbuild/bin/llvm-dis -show-annotations speak -o=speak.ll
+#echo "dis"
+#~/Dev/llvm/cbuild/bin/llvm-dis -show-annotations speak -o=speak.ll
 #echo "autodebug"
 #mv speak.ll speak.orig.ll
 #python ~/Dev/emscripten/tools/autodebugger.py speak.orig.ll speak.ll
-#mv speak.bc speak.orig.bc
-#~/Dev/llvm/cbuild/bin/llvm-as speak.ll -o=speak.bc
 
 echo "emscripten"
-$EMSCRIPTEN/emcc -O2 --js-transform "python bundle.py" speak.ll -o speak.raw.js
-cat shell_pre.js > ../speak.js
-cat speak.raw.js >> ../speak.js
-cat shell_post.js >> ../speak.js
+$EMSCRIPTEN/emcc -O3 -s CORRECT_SIGNS=1 --js-transform "python bundle.py" speak.bc -o speak.raw.js
+cat shell_pre.js > ../speakGenerator.js
+cat speak.raw.js >> ../speakGenerator.js
+cat shell_post.js >> ../speakGenerator.js
 
 
 

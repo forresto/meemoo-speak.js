@@ -1,3 +1,4 @@
-  return this.speak;
-}).call({});
+  }).call(self);
+  return self.ret;
+}
 
