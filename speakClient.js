@@ -60,7 +60,8 @@ function speak(text, args) {
     
     // Meemoo module specific, send when worker is done
     Meemoo.send("audio", audioSource);
-    document.getElementById('status').innerHTML = text;
+    document.getElementById('status').innerHTML = "";
+    document.getElementById('status').appendChild( document.createTextNode(text) );
 
   }
 

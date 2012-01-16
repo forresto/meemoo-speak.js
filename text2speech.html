@@ -34,7 +34,7 @@
     options.wordgap = 0;
     
     var rendered = false;
-  
+    
     Meemoo.setInfo({
       title: "text2speech",
       author: "forresto",
@@ -47,7 +47,9 @@
             rendered = false;
           }
           if (!rendered) {
-            document.getElementById('status').innerHTML = text + " [processing...]";
+            Meemoo.send( "info", text + " " + JSON.stringify(options, null, " ") );
+            document.getElementById('status').innerHTML = "";
+            document.getElementById('status').appendChild( document.createTextNode(text + " [processing...]") );
             speak(text, options);
             // Meemoo.send is called from speakClient.js
             rendered = true;
@@ -99,6 +101,9 @@
     }).addOutputs({
       audio: {
         type: "data:audio/x-wav"
+      },
+      info: {
+        type: "string"
       }
     });
     
